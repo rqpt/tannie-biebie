@@ -9,10 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Post random link
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      run: |
-        URL=$(shuf -n 1 links.txt)
-        curl -H "Content-Type: application/json" \
-            -d "{\"content\": \"$URL\"}" \
-            "$DISCORD_WEBHOOK"
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          URL=$(shuf -n 1 links.txt)
+          curl -H "Content-Type: application/json" \
+              -d "{\"content\": \"$URL\"}" \
+              "$DISCORD_WEBHOOK"
