@@ -1,0 +1,15 @@
+name: Send a message
+method: POST
+url: $BASE_URL
+body:
+  content: |-
+    {
+      "content": "$MESSAGE_MEDIA_LINK"
+    }
+  content_type: application/json
+headers:
+- name: Content-Type
+  value: application/json
+params:
+- name: wait
+  value: 'true'
