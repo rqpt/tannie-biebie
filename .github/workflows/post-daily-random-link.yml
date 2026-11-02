@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-      - uses: actions/checkout@v6
+        uses: actions/checkout@v6
       - name: Curl webhook url with random link as content
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
