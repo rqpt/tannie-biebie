@@ -1,14 +1,15 @@
-name: Daily Link
+name: Post Daily Random Link
 on:
   schedule:
     - cron: '0 4 * * *'
   workflow_dispatch:
 jobs:
-  post:
+  post-daily-random-link:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - name: Post random link
+      - name: Checkout repository
+      - uses: actions/checkout@v6
+      - name: Curl webhook url with random link as content
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
