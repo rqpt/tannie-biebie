@@ -1,7 +1,8 @@
 name: Post Daily Random Link
 on:
   schedule:
-    - cron: '42 4 * * *'
+    - cron: '42 6 * * *'
+      timezone: "Africa/Johannesburg"
   workflow_dispatch:
 permissions:
   contents: write
