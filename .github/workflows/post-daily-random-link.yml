@@ -3,17 +3,42 @@ on:
   schedule:
     - cron: '0 4 * * *'
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   post-daily-random-link:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-      - name: Curl webhook url with random link as content
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Select random link
+        id: random
         run: |
           URL=$(shuf -n 1 links.txt)
-          curl -H "Content-Type: application/json" \
-              -d "{\"content\": \"$URL\"}" \
-              "$DISCORD_WEBHOOK"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+      - name: Post link to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          URL: ${{ steps.random.outputs.url }}
+        run: |
+          curl --fail-with-body -sS \
+            -H "Content-Type: application/json" \
+            -d "$(jq -n --arg content "$URL" '{content: $content}')" \
+            "$DISCORD_WEBHOOK"
+      - name: Remove posted link
+        env:
+          URL: ${{ steps.random.outputs.url }}
+        run: |
+          grep -Fvx -- "$URL" links.txt > links.tmp || true
+          mv links.tmp links.txt
+      - name: Commit updated links.txt
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add links.txt
+
+          if ! git diff --cached --quiet; then
+            git commit -m "feat: removed posted link"
+            git push
+          fi
