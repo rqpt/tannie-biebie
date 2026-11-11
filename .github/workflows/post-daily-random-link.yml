@@ -1,13 +1,13 @@
-name: Post Daily Random Link
+name: Post Random Link
 on:
   schedule:
-    - cron: '35 1 * * *'
+    - cron: '35 1 1,3,7,15,21,25,30 * *'
       timezone: "Africa/Johannesburg"
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
-  post-daily-random-link:
+  post-random-link:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
